@@ -72,7 +72,7 @@ const RootQuery = new GraphQLObjectType({
       resolve(parent, args) {
         return axios
           .get(
-            `api.openweathermap.org/data/2.5/weather?lat=${args.lat}&lon=${args.lon}&appid=${process.env.weatherAPIKEY}`
+            `http://api.openweathermap.org/data/2.5/weather?lat=${args.lat}&lon=${args.lon}&appid=${process.env.weatherAPIKEY}`
           )
           .then((res) => res.data);
       },
