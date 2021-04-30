@@ -1,20 +1,33 @@
 const express = require("express");
 const { graphqlHTTP } = require("express-graphql");
 const schema = require("./schema");
+// var { buildSchema } = require("graphql");
 
 const app = express();
+
+// // GraphQL schema
+// var schema = buildSchema(`
+//     type Query {
+//         message: String
+//     }
+// `);
+// // Root resolver
+// var root = {
+//   message: () => "Hello World!",
+// };
 
 app.use(
   "/graphql",
   graphqlHTTP({
     schema: schema,
-    graphiql: true, // to deploy the grpahql playground
+    // rootValue: root,
+    graphiql: true, // to deploy the graphQL playground
   })
 );
 
-app.get("/", (req, res) => {
-  res.json({ message: "Welcome to fettoukh application." });
-});
-
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log("listening to " + PORT));
+app.listen(PORT, () =>
+  console.log(
+    "Express GraphQL Server Now Running On localhost:" + PORT + "/graphql"
+  )
+);

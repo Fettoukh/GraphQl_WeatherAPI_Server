@@ -4,6 +4,7 @@ const {
   GraphQLInt,
   GraphQLString,
   GraphQLSchema,
+  GraphQLList,
 } = require("graphql");
 const axios = require("axios");
 const dotenv = require("dotenv");
@@ -18,6 +19,14 @@ const CoordType = new GraphQLObjectType({
   }),
 });
 
+const WeatherType = new GraphQLObjectType({
+  name: "Weather",
+  fields: () => ({
+    main: { type: GraphQLString },
+    description: { type: GraphQLString },
+  }),
+});
+
 const MainType = new GraphQLObjectType({
   name: "Main",
   fields: () => ({
@@ -27,13 +36,14 @@ const MainType = new GraphQLObjectType({
   }),
 });
 
-const weatherType = new GraphQLObjectType({
-  name: "Weather",
+const OpenWeatherMapType = new GraphQLObjectType({
+  name: "OpenWeatherMap",
   fields: () => ({
+    coord: { type: CoordType },
+    weather: { type: new GraphQLList(WeatherType) },
+    main: { type: MainType },
     id: { type: GraphQLInt },
     name: { type: GraphQLString }, // City Name
-    main: { type: MainType },
-    coord: { type: CoordType },
   }),
 });
 
@@ -43,7 +53,7 @@ const RootQuery = new GraphQLObjectType({
   name: "RootQueryType",
   fields: {
     weatherByCity: {
-      type: weatherType,
+      type: OpenWeatherMapType,
       args: {
         //argument to search the Weather by cityName
         cityName: {
@@ -59,7 +69,7 @@ const RootQuery = new GraphQLObjectType({
       },
     },
     weatherByCoord: {
-      type: weatherType,
+      type: OpenWeatherMapType,
       args: {
         //argument to search the Weather by coordinates
         lon: {
